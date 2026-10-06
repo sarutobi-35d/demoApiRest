@@ -7,6 +7,7 @@ import com.scarlet.demoApiRest.exception.ResourceNotFoundException;
 import com.scarlet.demoApiRest.repository.ProduitRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,6 +20,7 @@ public class ProduitServiceImpl implements ProduitService{
     private final ProduitRepository produitRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public List<ProduitResponseDTO> lire() {
         return produitRepository.findAll()
                 .stream()
@@ -27,6 +29,15 @@ public class ProduitServiceImpl implements ProduitService{
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public ProduitResponseDTO trouver(Long id) {
+        return produitRepository.findById(id)
+                .map(this::enDTO)
+                .orElseThrow(() -> new ResourceNotFoundException("Aucun produit ne possède l'id: " + id));
+    }
+
+    @Override
+    @Transactional
     public ProduitResponseDTO creer(ProduitRequestDTO requestDTO) {
 
         Produit produitASave = enEntity(requestDTO);
@@ -37,6 +48,7 @@ public class ProduitServiceImpl implements ProduitService{
     }
 
     @Override
+    @Transactional
     public ProduitResponseDTO modifier(Long id, ProduitRequestDTO requestDTO) {
 
         return produitRepository.findById(id)
@@ -48,18 +60,16 @@ public class ProduitServiceImpl implements ProduitService{
                     Produit produitMAJ = produitRepository.save(produitExistant);
                     return enDTO(produitMAJ);
 
-                }).orElseThrow(() -> new ResourceNotFoundException("Pas de produit avec l'id :" + id));
+                }).orElseThrow(() -> new ResourceNotFoundException("Aucun produit ne possède l'id: " + id));
     }
 
     @Override
-    public String supprimer(Long id) {
-
-        Produit existProduct = produitRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Aucun produit ne possède l'id: " + id));
-
-        produitRepository.delete(existProduct);
-
-        return "Le produit avec l'id = " + id + " a été suppimer.";
+    @Transactional
+    public void supprimer(Long id) {
+        if (!produitRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Aucun produit ne possède l'id: " + id);
+        }
+        produitRepository.deleteById(id);
     }
 
 

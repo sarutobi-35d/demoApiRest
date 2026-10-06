@@ -18,7 +18,7 @@ public class Produit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 50)
+    @Column(length = 20)
     private String nom;
 
     @Column(length = 150)
@@ -26,5 +26,5 @@ public class Produit {
 
     private Integer prix;
 
-    private LocalDate dateFracbrication = LocalDate.now();
+    private LocalDate dateFabrication = LocalDate.now();
 }

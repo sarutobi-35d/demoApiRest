@@ -10,9 +10,11 @@ public interface ProduitService {
 
     List<ProduitResponseDTO> lire();
 
+    ProduitResponseDTO trouver(Long id);
+
     ProduitResponseDTO creer(ProduitRequestDTO requestDTO);
 
     ProduitResponseDTO modifier(Long id, ProduitRequestDTO requestDTO);
 
-   String supprimer(Long id);
+    void supprimer(Long id);
 }

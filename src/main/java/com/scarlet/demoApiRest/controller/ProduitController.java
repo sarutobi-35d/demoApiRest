@@ -4,37 +4,44 @@ import com.scarlet.demoApiRest.dto.ProduitRequestDTO;
 import com.scarlet.demoApiRest.dto.ProduitResponseDTO;
 import com.scarlet.demoApiRest.service.ProduitService;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/produit")
-@AllArgsConstructor
+@RequestMapping(path = "/produits")
+@RequiredArgsConstructor
 public class ProduitController {
 
     private final ProduitService produitService;
 
-    @GetMapping("/read")
+    @GetMapping
     public List<ProduitResponseDTO> read(){
         return produitService.lire();
     }
 
-    @PostMapping("/create")
+    @GetMapping("/{id}")
+    public ProduitResponseDTO trouver(@PathVariable Long id) {
+        return produitService.trouver(id);
+    }
+
+    @PostMapping
     public ProduitResponseDTO create(@Valid @RequestBody ProduitRequestDTO requestDTO){
         return produitService.creer(requestDTO);
     }
 
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public ProduitResponseDTO update(@PathVariable Long id, @Valid @RequestBody ProduitRequestDTO requestDTO){
         return produitService.modifier(id, requestDTO);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public String delete(@PathVariable Long id){
-        return produitService.supprimer(id);
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void supprimer(@PathVariable Long id) {
+        produitService.supprimer(id);
     }
 
 }

@@ -16,6 +16,7 @@ public class ProduitRequestDTO {
     private String nom;
 
     @NotBlank(message = "Veuillez écrire la description")
+    @Size(min = 3, max = 150, message ="La description doit contenir entre 3 et 150 caractères max.")
     private String description;
 
     @NotNull(message = "Veuillez insérer le prix")
