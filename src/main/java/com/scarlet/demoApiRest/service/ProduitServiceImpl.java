@@ -3,6 +3,7 @@ package com.scarlet.demoApiRest.service;
 import com.scarlet.demoApiRest.dto.ProduitRequestDTO;
 import com.scarlet.demoApiRest.dto.ProduitResponseDTO;
 import com.scarlet.demoApiRest.entity.Produit;
+import com.scarlet.demoApiRest.exception.ResourceNotFoundException;
 import com.scarlet.demoApiRest.repository.ProduitRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -47,14 +48,14 @@ public class ProduitServiceImpl implements ProduitService{
                     Produit produitMAJ = produitRepository.save(produitExistant);
                     return enDTO(produitMAJ);
 
-                }).orElseThrow(() -> new RuntimeException("Pas de produit avec l'id :" + id));
+                }).orElseThrow(() -> new ResourceNotFoundException("Pas de produit avec l'id :" + id));
     }
 
     @Override
     public String supprimer(Long id) {
 
         Produit existProduct = produitRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Aucun produit ne possède l'id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Aucun produit ne possède l'id: " + id));
 
         produitRepository.delete(existProduct);
 
