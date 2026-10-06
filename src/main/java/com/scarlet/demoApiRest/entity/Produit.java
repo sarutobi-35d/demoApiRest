@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "produit")
 @Getter
@@ -23,4 +25,6 @@ public class Produit {
     private String description;
 
     private Integer prix;
+
+    private LocalDate dateFracbrication = LocalDate.now();
 }

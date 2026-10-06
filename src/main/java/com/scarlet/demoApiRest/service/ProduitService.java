@@ -1,16 +1,18 @@
 package com.scarlet.demoApiRest.service;
 
+import com.scarlet.demoApiRest.dto.ProduitRequestDTO;
+import com.scarlet.demoApiRest.dto.ProduitResponseDTO;
 import com.scarlet.demoApiRest.entity.Produit;
 
 import java.util.List;
 
 public interface ProduitService {
 
-    Produit creer(Produit produit);
+    List<ProduitResponseDTO> lire();
 
-    List<Produit> lire();
+    ProduitResponseDTO creer(ProduitRequestDTO requestDTO);
 
-    Produit modifier(Long id, Produit produit);
+    ProduitResponseDTO modifier(Long id, ProduitRequestDTO requestDTO);
 
    String supprimer(Long id);
 }
